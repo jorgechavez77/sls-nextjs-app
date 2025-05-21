@@ -13,9 +13,4 @@ const nextConfig = (phase: string) => {
   return nextConfig;
 };
 
-// const nextConfig: NextConfig = {
-//   output: "standalone",
-//   assetPrefix: "https://dev-sls-nextjs-app-static.s3.us-east-1.amazonaws.com",
-// };
-
 export default nextConfig;
