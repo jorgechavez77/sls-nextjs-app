@@ -1,0 +1,89 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sls-nextjs-app
+
+Globals:
+  Function:
+    Timeout: 29
+
+Parameters:
+  Environment:
+    Type: String
+    AllowedValues:
+      - dev
+    Default: dev
+
+Resources:
+  NextJsApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Sub ${Environment}
+      EndpointConfiguration: REGIONAL
+      Domain:
+        DomainName: nextjs.neocliptica.com
+        CertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/c5f64aa5-289c-462f-a7c3-ce0cbcad2f47
+        Route53:
+          HostedZoneId: Z0787249DM5D0YIPWCAS
+
+  NextjsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${Environment}-sls-nextjs-app
+      CodeUri: webapp/
+      MemorySize: 256
+      Handler: run.sh
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          AWS_LAMBDA_EXEC_WRAPPER: /opt/bootstrap
+          AWS_LWA_ENABLE_COMPRESSION: true
+          RUST_LOG: info
+          PORT: 8000
+      Role: arn:aws:iam::198707198839:role/serverless-role
+      Layers:
+        - !Sub arn:aws:lambda:${AWS::Region}:753240598075:layer:LambdaAdapterLayerX86:25
+      Events:
+        RootEvent:
+          Type: Api
+          Properties:
+            Path: /
+            Method: any
+            RestApiId:
+              Ref: NextJsApi
+        ProxyEvent:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
+            RestApiId:
+              Ref: NextJsApi
+    Metadata:
+      BuildMethod: makefile
+
+  NextJsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${Environment}-sls-nextjs-app-static
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerPreferred
+      # AccessControl: PublicRead
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - GET
+            AllowedOrigins:
+              - "*"
+            ExposedHeaders:
+              - "ETag"
+            MaxAge: 3000
