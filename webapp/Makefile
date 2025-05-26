@@ -9,8 +9,8 @@ build:
 
 artifacts:
 	# Static resources ideally served from CloudFront
-	cp -r public/. .next/standalone/public
-	cp -r .next/static/. .next/standalone/.next/static
+	# cp -r public/. .next/standalone/public
+	# cp -r .next/static/. .next/standalone/.next/static
 
 	cp -r public $(BUILD_DIR)/tmp/
 	cp -r .next/static $(BUILD_DIR)/tmp/

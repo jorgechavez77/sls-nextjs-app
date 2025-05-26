@@ -1,4 +1,15 @@
 import Image from "next/image";
+const isDev = process.env.NODE_ENV === "development";
+
+const path = isDev
+  ? ""
+  : "https://dev-sls-nextjs-app-static.s3.us-east-1.amazonaws.com/public";
+
+const srcNext = `${path}/next.svg`;
+const srcVercel = `${path}/vercel.svg`;
+const srcFile = `${path}/file.svg`;
+const srcWindow = `${path}/window.svg`;
+const srcGlobe = `${path}/globe.svg`;
 
 export default function Home() {
   return (
@@ -6,7 +17,7 @@ export default function Home() {
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"
-          src="/next.svg"
+          src={srcNext}
           alt="Next.js logo"
           width={180}
           height={38}
@@ -34,7 +45,7 @@ export default function Home() {
           >
             <Image
               className="dark:invert"
-              src="/vercel.svg"
+              src={srcVercel}
               alt="Vercel logomark"
               width={20}
               height={20}
@@ -60,7 +71,7 @@ export default function Home() {
         >
           <Image
             aria-hidden
-            src="/file.svg"
+            src={srcFile}
             alt="File icon"
             width={16}
             height={16}
@@ -75,7 +86,7 @@ export default function Home() {
         >
           <Image
             aria-hidden
-            src="/window.svg"
+            src={srcWindow}
             alt="Window icon"
             width={16}
             height={16}
@@ -90,7 +101,7 @@ export default function Home() {
         >
           <Image
             aria-hidden
-            src="/globe.svg"
+            src={srcGlobe}
             alt="Globe icon"
             width={16}
             height={16}
