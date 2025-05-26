@@ -1,9 +1,9 @@
 import Image from "next/image";
 const isDev = process.env.NODE_ENV === "development";
 
-const path = isDev
-  ? ""
-  : "https://dev-sls-nextjs-app-static.s3.us-east-1.amazonaws.com/public";
+const ASSET_PREFIX = process.env.ASSET_PREFIX;
+
+const path = isDev ? "" : `${ASSET_PREFIX}/public`;
 
 const srcNext = `${path}/next.svg`;
 const srcVercel = `${path}/vercel.svg`;
