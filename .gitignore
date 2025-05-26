@@ -2,3 +2,4 @@ node_modules
 .aws-sam
 tmp
 .DS_Store
+deployment.sh
