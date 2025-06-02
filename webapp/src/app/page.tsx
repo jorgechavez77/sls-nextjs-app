@@ -1,5 +1,5 @@
-import NextJsPage from "../components/nextjs";
+import NextJsPage from '../components/nextjs'
 
 export default function Home() {
-  return <NextJsPage />;
+  return <NextJsPage />
 }
